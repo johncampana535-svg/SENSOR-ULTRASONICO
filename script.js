@@ -1,29 +1,8 @@
 const token = "e8e28909-6ba4-4f64-8ce4-e301adfd7a85";
-const variable = "Distance";
-
-const estado = document.getElementById("estado");
-const texto = document.getElementById("txt-dist");
-const carro = document.getElementById("carro");
-const barra = document.getElementById("nivel");
-const root = document.documentElement;
-
-// gráfica
-const ctx = document.getElementById("grafica").getContext("2d");
-const chart = new Chart(ctx, {
-  type: "line",
-  data: {
-    labels: [],
-    datasets: [{
-      data: [],
-      borderColor: "#22c55e",
-      tension: 0.3
-    }]
-  }
-});
 
 async function actualizar() {
   try {
-    const res = await fetch(`https://api.tago.io/data?variable=${variable}&qty=1`, {
+    const res = await fetch("https://api.tago.io/data?variable=Distance&qty=1", {
       headers: { "Device-Token": token }
     });
 
@@ -34,53 +13,43 @@ async function actualizar() {
     let d = parseFloat(data.result[0].value);
     if (isNaN(d)) d = 0;
 
-    actualizarUI(d);
+    // TEXTO
+    document.getElementById("dist").innerText = d.toFixed(1) + " cm";
+
+    // SEMÁFORO
+    let rojo = document.getElementById("rojo");
+    let amarillo = document.getElementById("amarillo");
+    let verde = document.getElementById("verde");
+
+    rojo.style.background = "#333";
+    amarillo.style.background = "#333";
+    verde.style.background = "#333";
+
+    // BARRA
+    let barra = document.getElementById("nivel");
+    let porcentaje = Math.min((d / 50) * 100, 100);
+    barra.style.width = porcentaje + "%";
+
+    // LÓGICA GENERAL
+    if (d <= 5) {
+      rojo.style.background = "red";
+      barra.style.background = "red";
+      document.body.style.background = "#3b0a0a";
+    } 
+    else if (d <= 20) {
+      amarillo.style.background = "orange";
+      barra.style.background = "orange";
+      document.body.style.background = "#3b2a0a";
+    } 
+    else {
+      verde.style.background = "lime";
+      barra.style.background = "lime";
+      document.body.style.background = "#0a3b1a";
+    }
 
   } catch (e) {
-    estado.innerText = "Error conexión";
+    console.log("Error:", e);
   }
-}
-
-function actualizarUI(d) {
-  texto.innerText = d.toFixed(1) + " cm";
-
-  let pos = Math.min((d / 50) * 100, 100);
-  carro.style.left = pos + "%";
-  barra.style.width = pos + "%";
-
-  // 🔥 CAMBIO DE COLORES DINÁMICO
-  if (d === 0) {
-    estado.innerText = "SIN DETECCIÓN";
-    root.style.setProperty('--color', 'gray');
-  } 
-  else if (d <= 5) {
-    estado.innerText = "PELIGRO";
-    root.style.setProperty('--color', 'red');
-  } 
-  else if (d <= 20) {
-    estado.innerText = "CERCA";
-    root.style.setProperty('--color', 'orange');
-  } 
-  else if (d <= 50) {
-    estado.innerText = "SEGURO";
-    root.style.setProperty('--color', 'lime');
-  } 
-  else {
-    estado.innerText = "LIBRE";
-    root.style.setProperty('--color', 'cyan');
-  }
-
-  // gráfica
-  chart.data.labels.push("");
-  chart.data.datasets[0].data.push(d);
-
-  if (chart.data.labels.length > 10) {
-    chart.data.labels.shift();
-    chart.data.datasets[0].data.shift();
-  }
-
-  chart.update();
 }
 
 setInterval(actualizar, 1000);
-actualizar();
