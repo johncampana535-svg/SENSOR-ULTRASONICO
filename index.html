@@ -2,61 +2,41 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>📡 Smart Distance Monitor</title>
-
+<title>Dashboard de Distancia</title>
 <link rel="stylesheet" href="style.css">
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
 <body>
 
-<div class="app">
+<h1>📡 Sistema de Monitoreo</h1>
 
-  <header>
-    <h1>📡 Smart Distance Monitor</h1>
-    <span id="estado" class="estado">Conectando...</span>
-  </header>
+<div class="contenedor">
 
-  <main>
+  <!-- SEMÁFORO -->
+  <div class="card">
+    <h2>Estado</h2>
+    <div class="semaforo">
+      <div id="rojo" class="luz"></div>
+      <div id="amarillo" class="luz"></div>
+      <div id="verde" class="luz"></div>
+    </div>
+  </div>
 
-    <section class="card center">
-      <div id="txt-dist" class="distancia">-- cm</div>
-      <div class="sub">Distancia actual</div>
-    </section>
+  <!-- BARRA -->
+  <div class="card">
+    <h2>Nivel</h2>
+    <div class="barra">
+      <div id="nivel"></div>
+    </div>
+  </div>
 
-    <section class="card radar-card">
-      <div class="radar">
-        <div class="onda"></div>
-        <div class="onda delay"></div>
-        <div class="centro"></div>
-      </div>
-    </section>
-
-    <section class="card">
-      <div class="barra">
-        <div id="nivel"></div>
-      </div>
-    </section>
-
-    <section class="card pista">
-      <div id="carro">🚗</div>
-    </section>
-
-    <section class="card">
-      <canvas id="grafica"></canvas>
-    </section>
-
-  </main>
-
-  <footer>
-    <span>IoT • Tiempo real</span>
-  </footer>
+  <!-- DATO -->
+  <div class="card">
+    <h2>Distancia</h2>
+    <h1 id="dist">-- cm</h1>
+  </div>
 
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
