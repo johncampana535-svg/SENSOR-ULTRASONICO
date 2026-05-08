@@ -1,4 +1,4 @@
-const token = "e8e28909-6ba4-4f64-8ce4-e301adfd7a85";
+const token = "46ef9d25-1174-4d85-9543-4a281e0767ab";
 
 async function actualizar() {
   try {
